@@ -1,6 +1,6 @@
 from typing import Type
 
-from fastapi import APIRouter, Body, Depends, HTTPException, Request, status
+from fastapi import APIRouter, Body, Depends, HTTPException, Query, Request, status
 from pydantic import EmailStr
 
 from fastapi_users import exceptions, models, schemas
@@ -36,7 +36,7 @@ def get_verify_router(
 
         return None
 
-    @router.post(
+    @router.get(
         "/verify",
         response_model=user_schema,
         name="verify:verify",
@@ -65,7 +65,7 @@ def get_verify_router(
     )
     async def verify(
         request: Request,
-        token: str = Body(..., embed=True),
+        token: str = Query(...),
         user_manager: BaseUserManager[models.UP, models.ID] = Depends(get_user_manager),
     ):
         try:
